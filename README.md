@@ -19,3 +19,6 @@
 - **Хөгжүүлэлтын орчин:** Visual Studio Code
 - **Хувилбар хяналтын систем:** Git, GitHub
 - **Төслийн менежмент:** GitHub Projects, Scrum Board
+
+## Баримт бичиг 
+https://www.overleaf.com/7632263321mkmjtgtwzwqv#68c707
