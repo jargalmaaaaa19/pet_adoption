@@ -21,4 +21,6 @@
 - **Төслийн менежмент:** GitHub Projects, Scrum Board
 
 ## Баримт бичиг 
-https://www.overleaf.com/7632263321mkmjtgtwzwqv#68c707
+Latex:    https://www.overleaf.com/7632263321mkmjtgtwzwqv#68c707
+
+Excel:    https://mustedumn-my.sharepoint.com/:x:/g/personal/b232270071_must_edu_mn/IQBICDlH1iPmSIYVMIIQ1_YCARZc0fiEiOAQIUHz5VBkLrQ?e=9NLt3L
