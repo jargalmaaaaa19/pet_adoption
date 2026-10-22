@@ -635,12 +635,20 @@
       }
 
       .pet-location,
+      .pet-location-detail,
       .pet-description,
       .pet-detail {
         margin: 7px 0 0;
         color: var(--muted);
         font-size: 0.84rem;
         line-height: 1.5;
+      }
+
+      .pet-location-detail {
+        margin-top: 3px;
+        padding-left: 20px;
+        color: #7b887f;
+        font-size: 0.78rem;
       }
 
       .pet-description {
@@ -883,7 +891,7 @@
             id="location"
             name="location"
             type="search"
-            placeholder="Жишээ нь: Баянзүрх, Дархан сум"
+            placeholder="Жишээ нь: Баянзүрх, Олимп хотхон"
           >
         </div>
 
@@ -1242,6 +1250,10 @@
         location.className = 'pet-location';
         location.textContent = `📍 ${pet.location}`;
 
+        const locationDetail = document.createElement('p');
+        locationDetail.className = 'pet-location-detail';
+        locationDetail.textContent = pet.locationDetail;
+
         const origin = document.createElement('p');
         origin.className = 'pet-detail';
         origin.textContent = `Гарал үүсэл: ${pet.origin}`;
@@ -1272,7 +1284,15 @@
         }
 
         tags.append(typeTag, ageTag);
-        body.append(heading, tags, breed, location, origin, description);
+        body.append(
+          heading,
+          tags,
+          breed,
+          location,
+          locationDetail,
+          origin,
+          description,
+        );
         const divider = document.createElement('div');
         divider.className = 'listing-divider';
         body.append(divider, listing);

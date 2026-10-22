@@ -62,7 +62,10 @@ function filterPets(pets, filters = {}) {
       return false;
     }
 
-    if (location && !normalizeText(pet.location).includes(location)) {
+    const fullLocation = `${normalizeText(pet.location)} ${normalizeText(
+      pet.locationDetail,
+    )}`;
+    if (location && !fullLocation.includes(location)) {
       return false;
     }
 

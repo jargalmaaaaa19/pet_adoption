@@ -97,6 +97,70 @@ const locations = [
   'Өмнөговь аймаг, Ханбогд сум',
 ];
 
+const locationDetails = {
+  'Улаанбаатар, Баянзүрх дүүрэг': [
+    '26-р хороо, Олимп хотхон',
+    '15-р хороо, 13-р хороолол',
+    'Амгалан орчмын гэр хороолол',
+    'Натур худалдааны төвийн ойролцоо',
+  ],
+  'Улаанбаатар, Сүхбаатар дүүрэг': [
+    '8-р хороо, Бага тойруу',
+    '6-р хороо, 11-р хороолол',
+    'Сүхбаатарын талбайн ойролцоо',
+    '7-р хороо, 5-р хороолол',
+  ],
+  'Улаанбаатар, Хан-Уул дүүрэг': [
+    '15-р хороо, Зайсангийн ам',
+    '4-р хороо, Яармаг',
+    'Мишээл экспогийн ойролцоо',
+    '19-р хороо, Буянт-Ухаа',
+  ],
+  'Улаанбаатар, Баянгол дүүрэг': [
+    '3-р хороо, 4-р хороолол',
+    '6-р хороо, 10-р хороолол',
+    '25-р эмийн сангийн ойролцоо',
+    '16-р хороо, Төмөр зам',
+  ],
+  'Улаанбаатар, Чингэлтэй дүүрэг': [
+    '5-р хороо, Тэнгис кино театрын ойролцоо',
+    '6-р хороо, Бөмбөгөр худалдааны төв',
+    '12-р хороо, Хайлааст',
+    '2-р хороо, Бага тойруу',
+  ],
+  'Улаанбаатар, Сонгинохайрхан дүүрэг': [
+    '21-р хороо, Партизаны гудамж',
+    '18-р хороо, 5 шар',
+    '32-р хороо, Баянхошуу',
+    '20-р хороо, Толгойт',
+  ],
+  'Улаанбаатар, Налайх дүүрэг': [
+    '1-р хороо, Налайхын төв',
+    '2-р хороо, Тайж хайрхан',
+    '7-р хороо, Городок',
+    '5-р хороо, Тэрэлжийн зам',
+  ],
+  'Улаанбаатар, Багануур дүүрэг': [
+    '3-р хороо, Нацагдоржийн гудамж',
+    '1-р хороо, Хэрлэнгийн гудамж',
+    '4-р хороо, Уурхайчин хороолол',
+    '5-р хороо, Наран хороолол',
+  ],
+  'Улаанбаатар, Багахангай дүүрэг': [
+    '1-р хороо, Төвийн гудамж',
+    '2-р хороо, Үйлдвэрийн бүс',
+    '1-р хороо, Төмөр замын буудлын ойролцоо',
+    '2-р хороо, Соёлын төвийн ойролцоо',
+  ],
+};
+
+const regionalLandmarks = [
+  'төв талбайн ойролцоо',
+  'төв захын хажууд',
+  'аймгийн эмнэлгийн ойролцоо',
+  'соёлын төвийн ойролцоо',
+];
+
 const origins = [
   'Асрамжийн төвөөс',
   'Сайн дурын асрагчаас',
@@ -138,14 +202,21 @@ function generateDemoPets(count = 120) {
     const type = petTypes[index % petTypes.length];
     const nameIndex = index % petNames.length;
     const nameVersion = Math.floor(index / petNames.length);
+    const locationIndex = Math.floor(index / 3) % locations.length;
+    const location = locations[locationIndex];
     const listingType = index % 5 === 1 ? 'sale' : 'adoption';
+    const districtDetails = locationDetails[location];
+    const regionalSubLocation = location.split(', ')[1].replace(/ сум$/, '');
     const pet = {
       id: index + 1,
       name: `${petNames[nameIndex]}${nameVersion ? ` ${nameVersion + 1}` : ''}`,
       type,
       breed: breedsByType[type][Math.floor(index / 2) % breedsByType[type].length],
       age: (index % 12) + 1,
-      location: locations[Math.floor(index / 3) % locations.length],
+      location,
+      locationDetail: districtDetails
+        ? districtDetails[Math.floor(index / locations.length) % districtDetails.length]
+        : `${(Math.floor(index / locations.length) % 5) + 1}-р баг, ${regionalSubLocation} ${regionalLandmarks[Math.floor(index / locations.length) % regionalLandmarks.length]}`,
       origin: origins[Math.floor(index / 4) % origins.length],
       listingType,
       description:

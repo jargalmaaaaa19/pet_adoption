@@ -64,6 +64,18 @@ describe('filterPets', () => {
     ]);
   });
 
+  test('searches district, soum, and detailed address together', () => {
+    const detailedPet = {
+      id: 5,
+      location: 'Улаанбаатар, Баянзүрх дүүрэг',
+      locationDetail: '26-р хороо, Олимп хотхон',
+    };
+
+    expect(filterPets([detailedPet], { location: 'ОЛИМП' })).toEqual([
+      detailedPet,
+    ]);
+  });
+
   test('filters by a case-insensitive partial breed', () => {
     expect(filterPets(pets, { breed: 'SHORTHAIR' }).map((pet) => pet.id)).toEqual([
       2, 4,
