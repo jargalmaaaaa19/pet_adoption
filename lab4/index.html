@@ -189,19 +189,107 @@
       .field input,
       .field select {
         width: 100%;
-        min-height: 46px;
+        min-height: 50px;
         padding: 10px 12px;
         border: 1px solid #d7e0d8;
-        border-radius: 10px;
+        border-radius: 12px;
         background: #fff;
         color: inherit;
       }
 
       .field input:focus,
       .field select:focus,
+      .sort-control select:focus,
       button:focus-visible {
         outline: 3px solid #a9d7b9;
         outline-offset: 2px;
+      }
+
+      .select-wrap {
+        position: relative;
+      }
+
+      .select-wrap::after {
+        position: absolute;
+        top: 50%;
+        right: 16px;
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid #607669;
+        border-bottom: 2px solid #607669;
+        content: "";
+        pointer-events: none;
+        transform: translateY(-70%) rotate(45deg);
+        transition: transform 150ms ease;
+      }
+
+      .select-wrap:focus-within::after {
+        transform: translateY(-25%) rotate(225deg);
+      }
+
+      .field select,
+      .sort-control select {
+        appearance: none;
+        cursor: pointer;
+        transition:
+          border-color 150ms ease,
+          box-shadow 150ms ease,
+          background-color 150ms ease;
+      }
+
+      .field select {
+        min-height: 52px;
+        padding: 10px 42px 10px 48px;
+        border-color: #d9e5db;
+        background: #fbfdfb;
+        font-weight: 650;
+      }
+
+      .sort-control select {
+        min-height: 42px;
+        padding: 8px 38px 8px 14px;
+        border-color: #d9e5db;
+        border-radius: 11px;
+        background: #fbfdfb;
+        color: #33463a;
+        font-weight: 650;
+      }
+
+      .field select:hover,
+      .sort-control select:hover {
+        border-color: #9bbda2;
+        background-color: #f6faf6;
+      }
+
+      .field select:focus,
+      .sort-control select:focus {
+        border-color: #6a9c78;
+        background-color: #fff;
+        box-shadow: 0 0 0 4px rgb(106 156 120 / 13%);
+      }
+
+      .field select option,
+      .sort-control select option {
+        padding: 11px;
+        background: #fff;
+        color: #263d30;
+      }
+
+      .select-icon {
+        position: absolute;
+        top: 50%;
+        left: 11px;
+        z-index: 1;
+        display: grid;
+        width: 29px;
+        height: 29px;
+        place-items: center;
+        border-radius: 9px;
+        background: #edf5ee;
+        color: var(--green-dark);
+        font-size: 0.9rem;
+        pointer-events: none;
+        transform: translateY(-50%);
       }
 
       .age-fields {
@@ -590,12 +678,15 @@
       <form class="filter-panel" id="pet-filters">
         <div class="field">
           <label for="animal-type">Амьтны төрөл</label>
-          <select id="animal-type" name="type">
-            <option value="">Бүх төрөл</option>
-            <option value="Dog">Нохой</option>
-            <option value="Cat">Муур</option>
-            <option value="Rabbit">Туулай</option>
-          </select>
+          <div class="select-wrap">
+            <span class="select-icon" aria-hidden="true">🐾</span>
+            <select id="animal-type" name="type">
+              <option value="">Бүх төрөл</option>
+              <option value="Dog">Нохой</option>
+              <option value="Cat">Муур</option>
+              <option value="Rabbit">Туулай</option>
+            </select>
+          </div>
         </div>
 
         <div class="field">
@@ -645,11 +736,14 @@
 
         <div class="field">
           <label for="listing-type">Зарын төрөл</label>
-          <select id="listing-type" name="listingType">
-            <option value="">Бүх зар</option>
-            <option value="adoption">Үрчлүүлнэ</option>
-            <option value="sale">Худалдаална</option>
-          </select>
+          <div class="select-wrap">
+            <span class="select-icon" aria-hidden="true">⌑</span>
+            <select id="listing-type" name="listingType">
+              <option value="">Бүх зар</option>
+              <option value="adoption">Үрчлүүлнэ</option>
+              <option value="sale">Худалдаална</option>
+            </select>
+          </div>
         </div>
 
         <button class="reset-button" type="reset">Шүүлтүүр цэвэрлэх</button>
@@ -670,12 +764,14 @@
           </div>
           <label class="sort-control" for="sort-by">
             Эрэмбэлэх
-            <select id="sort-by" name="sort">
-              <option value="newest">Шинээр нэмэгдсэн</option>
-              <option value="oldest">Эхэлж нэмэгдсэн</option>
-              <option value="price-low">Үнэ: багаас их</option>
-              <option value="price-high">Үнэ: ихээс бага</option>
-            </select>
+            <span class="select-wrap sort-select-wrap">
+              <select id="sort-by" name="sort">
+                <option value="newest">Шинээр нэмэгдсэн</option>
+                <option value="oldest">Эхэлж нэмэгдсэн</option>
+                <option value="price-low">Үнэ: багаас их</option>
+                <option value="price-high">Үнэ: ихээс бага</option>
+              </select>
+            </span>
           </label>
         </div>
         <div class="pet-grid" id="pet-list" aria-live="polite"></div>
