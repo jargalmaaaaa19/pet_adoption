@@ -70,4 +70,10 @@ function filterPets(pets, filters = {}) {
   });
 }
 
-module.exports = { createEmptyPetFilters, filterPets };
+const petFilters = { createEmptyPetFilters, filterPets };
+
+if (typeof module === 'object' && module.exports) {
+  module.exports = petFilters;
+} else {
+  globalThis.PetFilters = petFilters;
+}
