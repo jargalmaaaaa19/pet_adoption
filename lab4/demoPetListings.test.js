@@ -15,6 +15,7 @@ describe('generateDemoPets', () => {
           pet.breed &&
           Number.isFinite(pet.age) &&
           pet.location &&
+          pet.locationDetail &&
           pet.origin &&
           pet.description,
       ),
@@ -49,6 +50,8 @@ describe('generateDemoPets', () => {
     );
     expect([...locations]).toContain('Улаанбаатар, Баянзүрх дүүрэг');
     expect([...locations]).toContain('Дархан-Уул аймаг, Дархан сум');
+    expect(pets.some((pet) => pet.locationDetail.includes('хороо'))).toBe(true);
+    expect(pets.some((pet) => pet.locationDetail.includes('баг'))).toBe(true);
   });
 
   test('finds a listing using its detailed district name', () => {
@@ -57,5 +60,13 @@ describe('generateDemoPets', () => {
     expect(
       filterPets(pets, { location: 'БАЯНЗҮРХ' }).map((pet) => pet.id),
     ).toEqual([1, 2, 3, 97, 98, 99]);
+  });
+
+  test('finds a listing using its detailed neighborhood name', () => {
+    const pets = generateDemoPets();
+
+    expect(
+      filterPets(pets, { location: 'олимп хотхон' }).map((pet) => pet.id),
+    ).toEqual([1, 2, 3]);
   });
 });
