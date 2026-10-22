@@ -34,6 +34,8 @@ function createEmptyPetFilters() {
     minAge: '',
     maxAge: '',
     location: '',
+    breed: '',
+    listingType: '',
   };
 }
 
@@ -46,6 +48,8 @@ function filterPets(pets, filters = {}) {
     filters !== null && typeof filters === 'object' ? filters : {};
   const type = normalizeText(safeFilters.type);
   const location = normalizeText(safeFilters.location);
+  const breed = normalizeText(safeFilters.breed);
+  const listingType = normalizeText(safeFilters.listingType);
   const minAge = normalizeAge(safeFilters.minAge);
   const maxAge = normalizeAge(safeFilters.maxAge);
 
@@ -59,6 +63,14 @@ function filterPets(pets, filters = {}) {
     }
 
     if (location && !normalizeText(pet.location).includes(location)) {
+      return false;
+    }
+
+    if (breed && !normalizeText(pet.breed).includes(breed)) {
+      return false;
+    }
+
+    if (listingType && normalizeText(pet.listingType) !== listingType) {
       return false;
     }
 

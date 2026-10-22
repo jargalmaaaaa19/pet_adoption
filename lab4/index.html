@@ -96,7 +96,7 @@
 
       .filter-panel {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 14px;
         align-items: end;
         padding: 22px;
@@ -227,10 +227,42 @@
       }
 
       .pet-location,
-      .pet-description {
+      .pet-description,
+      .pet-detail {
         margin: 8px 0 0;
         color: var(--muted);
         line-height: 1.5;
+      }
+
+      .pet-listing {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: 16px;
+        padding-top: 14px;
+        border-top: 1px solid var(--border);
+      }
+
+      .listing-badge {
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #eef5ef;
+        color: var(--green-dark);
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .listing-badge.sale {
+        background: #fff2d9;
+        color: #79551b;
+      }
+
+      .pet-price {
+        color: var(--green-dark);
+        font-size: 1.05rem;
+        font-weight: 800;
+        text-align: right;
       }
 
       .empty-state {
@@ -295,8 +327,8 @@
         <p class="eyebrow">Шинэ найзаа олоорой</p>
         <h1 id="page-title">Танд тохирох тэжээвэр амьтнаа хай</h1>
         <p class="hero-copy">
-          Амьтны төрөл, нас болон байршлаа сонгоод үрчлүүлэх заруудыг шүүн
-          хараарай.
+          Амьтны төрөл, үүлдэр, нас болон байршлаар хайж, зар бүрийн гарал
+          үүсэл, үрчлүүлэх эсвэл худалдах нөхцөлийг хараарай.
         </p>
         <p class="demo-note">
           Энэ хуудас нь ажиллагааг харуулах демо бөгөөд доорх жишээ зарууд бодит
@@ -316,7 +348,7 @@
         </div>
 
         <div class="field">
-          <label>Нас (жил)</label>
+          <label for="min-age">Нас (жил)</label>
           <div class="age-fields">
             <input
               id="min-age"
@@ -350,6 +382,25 @@
           >
         </div>
 
+        <div class="field">
+          <label for="breed">Үүлдэр</label>
+          <input
+            id="breed"
+            name="breed"
+            type="search"
+            placeholder="Жишээ нь: Shorthair"
+          >
+        </div>
+
+        <div class="field">
+          <label for="listing-type">Зарын төрөл</label>
+          <select id="listing-type" name="listingType">
+            <option value="">Бүх зар</option>
+            <option value="adoption">Үрчлүүлнэ</option>
+            <option value="sale">Худалдаална</option>
+          </select>
+        </div>
+
         <button class="reset-button" type="reset">Шүүлтүүр цэвэрлэх</button>
       </form>
 
@@ -369,48 +420,68 @@
           id: 1,
           name: 'Бороо',
           type: 'Dog',
+          breed: 'Монголын эрлийз',
           age: 2,
           location: 'Улаанбаатар',
+          origin: 'Найзынхаа асрамжаас',
+          listingType: 'adoption',
           description: 'Найрсаг, тоглох дуртай. Шинэ гэр бүлээ хүлээж байна.',
         },
         {
           id: 2,
           name: 'Сондор',
           type: 'Cat',
+          breed: 'Британийн богино үст',
           age: 1,
           location: 'Дархан',
+          origin: 'Гэрийн үржүүлгээс',
+          listingType: 'sale',
+          price: 450000,
           description: 'Тайван зантай, гэрт дассан өхөөрдөм муур.',
         },
         {
           id: 3,
           name: 'Хөөрхөн',
           type: 'Rabbit',
+          breed: 'Нидерланд одой',
           age: 3,
           location: 'Улаанбаатар',
+          origin: 'Асрамжийн төвөөс',
+          listingType: 'adoption',
           description: 'Зөөлөн үстэй, арчилгаа сайтай туулай.',
         },
         {
           id: 4,
           name: 'Цасхан',
           type: 'Dog',
+          breed: 'Самоед',
           age: 5,
           location: 'Эрдэнэт',
+          origin: 'Эзэн нь нүүх болсон тул',
+          listingType: 'adoption',
           description: 'Ухаалаг, алхах дуртай, нас бие гүйцсэн нохой.',
         },
         {
           id: 5,
           name: 'Мишээл',
           type: 'Cat',
+          breed: 'Шотланд нугалаа чихт',
           age: 4,
           location: 'Улаанбаатар',
+          origin: 'Сайн дурын асрагчаас',
+          listingType: 'sale',
+          price: 600000,
           description: 'Хүмүүстэй хурдан дасдаг, дөлгөөн муур.',
         },
         {
           id: 6,
           name: 'Азтай',
           type: 'Dog',
+          breed: 'Монголын эрлийз',
           age: 1,
           location: 'Дархан',
+          origin: 'Гудамжнаас олж аварсан',
+          listingType: 'adoption',
           description: 'Эрч хүчтэй гөлөг, хамтдаа өсөх эзнээ хайж байна.',
         },
       ];
@@ -448,16 +519,45 @@
         ageTag.className = 'pet-tag';
         ageTag.textContent = `${pet.age} настай`;
 
+        const breed = document.createElement('p');
+        breed.className = 'pet-detail';
+        breed.textContent = `Үүлдэр: ${pet.breed}`;
+
         const location = document.createElement('p');
         location.className = 'pet-location';
         location.textContent = `📍 ${pet.location}`;
+
+        const origin = document.createElement('p');
+        origin.className = 'pet-detail';
+        origin.textContent = `Гарал үүсэл: ${pet.origin}`;
 
         const description = document.createElement('p');
         description.className = 'pet-description';
         description.textContent = pet.description;
 
+        const listing = document.createElement('div');
+        listing.className = 'pet-listing';
+
+        const listingBadge = document.createElement('span');
+        listingBadge.className = 'listing-badge';
+        listingBadge.textContent =
+          pet.listingType === 'sale' ? 'Худалдаална' : 'Үрчлүүлнэ';
+
+        listing.append(listingBadge);
+        if (
+          pet.listingType === 'sale' &&
+          Number.isFinite(pet.price) &&
+          pet.price >= 0
+        ) {
+          listingBadge.classList.add('sale');
+          const price = document.createElement('span');
+          price.className = 'pet-price';
+          price.textContent = `${new Intl.NumberFormat('mn-MN').format(pet.price)} ₮`;
+          listing.append(price);
+        }
+
         tags.append(typeTag, ageTag);
-        body.append(title, tags, location, description);
+        body.append(title, tags, breed, location, origin, description, listing);
         card.append(illustration, body);
         return card;
       }

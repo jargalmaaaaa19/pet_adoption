@@ -1,10 +1,48 @@
 const { createEmptyPetFilters, filterPets } = require('./petFilters');
 
 const pets = [
-  { id: 1, name: 'Luna', type: 'Dog', age: 2, location: 'Ulaanbaatar' },
-  { id: 2, name: 'Milo', type: 'Cat', age: 5, location: 'Darkhan' },
-  { id: 3, name: 'Nala', type: 'Dog', age: 7, location: 'Ulaanbaatar' },
-  { id: 4, name: 'Pip', type: 'Cat', age: 1, location: 'Erdenet' },
+  {
+    id: 1,
+    name: 'Luna',
+    type: 'Dog',
+    breed: 'Golden Retriever',
+    age: 2,
+    location: 'Ulaanbaatar',
+    origin: 'Local shelter',
+    listingType: 'adoption',
+  },
+  {
+    id: 2,
+    name: 'Milo',
+    type: 'Cat',
+    breed: 'British Shorthair',
+    age: 5,
+    location: 'Darkhan',
+    origin: 'Foster family',
+    listingType: 'sale',
+    price: 500000,
+  },
+  {
+    id: 3,
+    name: 'Nala',
+    type: 'Dog',
+    breed: 'Mongolian mixed breed',
+    age: 7,
+    location: 'Ulaanbaatar',
+    origin: 'Rescue center',
+    listingType: 'adoption',
+  },
+  {
+    id: 4,
+    name: 'Pip',
+    type: 'Cat',
+    breed: 'British Shorthair',
+    age: 1,
+    location: 'Erdenet',
+    origin: 'Home-raised',
+    listingType: 'sale',
+    price: 650000,
+  },
 ];
 
 describe('filterPets', () => {
@@ -24,6 +62,28 @@ describe('filterPets', () => {
     expect(filterPets(pets, { location: 'ULAA' }).map((pet) => pet.id)).toEqual([
       1, 3,
     ]);
+  });
+
+  test('filters by a case-insensitive partial breed', () => {
+    expect(filterPets(pets, { breed: 'SHORTHAIR' }).map((pet) => pet.id)).toEqual([
+      2, 4,
+    ]);
+  });
+
+  test('filters adoption and sale listings by listing type', () => {
+    expect(
+      filterPets(pets, { listingType: 'sale' }).map((pet) => pet.id),
+    ).toEqual([2, 4]);
+  });
+
+  test('combines breed and listing type filters', () => {
+    expect(
+      filterPets(pets, {
+        breed: 'british',
+        listingType: 'sale',
+        minAge: 5,
+      }).map((pet) => pet.id),
+    ).toEqual([2]);
   });
 
   test('combines animal type, age, and location filters', () => {
@@ -52,6 +112,8 @@ describe('filterPets', () => {
       minAge: '',
       maxAge: '',
       location: '',
+      breed: '',
+      listingType: '',
     });
     expect(filterPets(pets, createEmptyPetFilters())).toEqual(pets);
   });
@@ -63,6 +125,8 @@ describe('filterPets', () => {
         minAge: 'not-an-age',
         maxAge: -1,
         location: null,
+        breed: 42,
+        listingType: null,
       }),
     ).toEqual(pets);
     expect(filterPets(null, {})).toEqual([]);
