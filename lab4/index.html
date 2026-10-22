@@ -209,87 +209,235 @@
         position: relative;
       }
 
-      .select-wrap::after {
+      .select-wrap.custom-dropdown {
+        z-index: 3;
+      }
+
+      .select-wrap.custom-dropdown.is-open {
+        z-index: 8;
+      }
+
+      .dropdown-native-select {
         position: absolute;
-        top: 50%;
-        right: 16px;
-        width: 8px;
-        height: 8px;
-        border-right: 2px solid #607669;
-        border-bottom: 2px solid #607669;
-        content: "";
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
         pointer-events: none;
-        transform: translateY(-70%) rotate(45deg);
-        transition: transform 150ms ease;
       }
 
-      .select-wrap:focus-within::after {
-        transform: translateY(-25%) rotate(225deg);
-      }
-
-      .field select,
-      .sort-control select {
-        appearance: none;
+      .dropdown-trigger {
+        display: flex;
+        width: 100%;
+        min-height: 54px;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 13px 8px 10px;
+        border: 1px solid #d9e5db;
+        border-radius: 13px;
+        background: linear-gradient(180deg, #fff, #f9fcf9);
+        color: #253b2e;
+        text-align: left;
         cursor: pointer;
         transition:
-          border-color 150ms ease,
-          box-shadow 150ms ease,
-          background-color 150ms ease;
+          border-color 160ms ease,
+          box-shadow 160ms ease,
+          background 160ms ease,
+          transform 160ms ease;
+      }
+
+      .dropdown-trigger:hover {
+        border-color: #a8c7ae;
+        background: #fbfefb;
+        transform: translateY(-1px);
       }
 
       .field select {
-        min-height: 52px;
-        padding: 10px 42px 10px 48px;
-        border-color: #d9e5db;
-        background: #fbfdfb;
-        font-weight: 650;
+        appearance: none;
       }
 
-      .sort-control select {
+      .sort-select-wrap .dropdown-trigger {
         min-height: 42px;
-        padding: 8px 38px 8px 14px;
-        border-color: #d9e5db;
+        padding: 6px 10px;
         border-radius: 11px;
         background: #fbfdfb;
-        color: #33463a;
-        font-weight: 650;
       }
 
-      .field select:hover,
-      .sort-control select:hover {
-        border-color: #9bbda2;
-        background-color: #f6faf6;
+      .dropdown-trigger:focus-visible,
+      .dropdown-trigger[aria-expanded="true"] {
+        border-color: #72a77e;
+        outline: none;
+        box-shadow: 0 0 0 4px rgb(106 156 120 / 14%);
       }
 
-      .field select:focus,
-      .sort-control select:focus {
-        border-color: #6a9c78;
-        background-color: #fff;
-        box-shadow: 0 0 0 4px rgb(106 156 120 / 13%);
+      .dropdown-value {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 11px;
       }
 
-      .field select option,
-      .sort-control select option {
-        padding: 11px;
-        background: #fff;
-        color: #263d30;
-      }
-
-      .select-icon {
-        position: absolute;
-        top: 50%;
-        left: 11px;
-        z-index: 1;
+      .dropdown-value-icon,
+      .dropdown-option-icon {
         display: grid;
-        width: 29px;
-        height: 29px;
+        flex: none;
+        width: 34px;
+        height: 34px;
         place-items: center;
-        border-radius: 9px;
+        border-radius: 11px;
         background: #edf5ee;
-        color: var(--green-dark);
-        font-size: 0.9rem;
-        pointer-events: none;
-        transform: translateY(-50%);
+        font-size: 1rem;
+      }
+
+      .dropdown-copy {
+        display: grid;
+        min-width: 0;
+        gap: 2px;
+      }
+
+      .dropdown-current-label {
+        overflow: hidden;
+        font-size: 0.88rem;
+        font-weight: 750;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .dropdown-current-description {
+        overflow: hidden;
+        color: #7b887f;
+        font-size: 0.72rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .dropdown-chevron {
+        display: block;
+        flex: none;
+        width: 9px;
+        height: 9px;
+        margin: 0 3px 4px 0;
+        border-right: 2px solid #607669;
+        border-bottom: 2px solid #607669;
+        transform: rotate(45deg);
+        transition: transform 160ms ease;
+      }
+
+      .dropdown-trigger[aria-expanded="true"] .dropdown-chevron {
+        margin-top: 7px;
+        transform: rotate(225deg);
+      }
+
+      .dropdown-menu {
+        position: absolute;
+        top: calc(100% + 9px);
+        right: 0;
+        left: 0;
+        z-index: 10;
+        display: grid;
+        max-height: min(340px, 55vh);
+        gap: 4px;
+        overflow-y: auto;
+        padding: 7px;
+        border: 1px solid #dfe8e0;
+        border-radius: 15px;
+        background: #fff;
+        box-shadow:
+          0 22px 48px rgb(28 55 37 / 16%),
+          0 3px 9px rgb(28 55 37 / 6%);
+        animation: dropdown-enter 140ms ease-out;
+      }
+
+      .sort-select-wrap .dropdown-menu {
+        right: 0;
+        left: auto;
+        width: min(290px, 84vw);
+      }
+
+      .dropdown-option {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        gap: 11px;
+        padding: 9px;
+        border: 1px solid transparent;
+        border-radius: 11px;
+        background: #fff;
+        color: #34483a;
+        text-align: left;
+        cursor: pointer;
+        transition:
+          border-color 140ms ease,
+          background 140ms ease;
+      }
+
+      .dropdown-option:hover,
+      .dropdown-option:focus-visible {
+        border-color: #e1eee3;
+        outline: none;
+        background: #f6faf6;
+      }
+
+      .dropdown-option[aria-selected="true"] {
+        border-color: #d8eadd;
+        background: #f0f7f1;
+      }
+
+      .dropdown-option-copy {
+        display: grid;
+        min-width: 0;
+        flex: 1;
+        gap: 3px;
+      }
+
+      .dropdown-option-label {
+        font-size: 0.86rem;
+        font-weight: 750;
+      }
+
+      .dropdown-option-description {
+        color: #7b887f;
+        font-size: 0.73rem;
+        line-height: 1.35;
+      }
+
+      .dropdown-check {
+        color: var(--green);
+        font-size: 1rem;
+        font-weight: 800;
+      }
+
+      .sort-select-wrap .dropdown-value-icon,
+      .sort-select-wrap .dropdown-current-description {
+        display: none;
+      }
+
+      .sort-select-wrap .dropdown-trigger {
+        min-width: 190px;
+        gap: 10px;
+      }
+
+      .sort-select-wrap {
+        display: block;
+      }
+
+      .sort-select-wrap .dropdown-current-label {
+        font-size: 0.82rem;
+      }
+
+      @keyframes dropdown-enter {
+        from {
+          opacity: 0;
+          transform: translateY(-4px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .age-fields {
@@ -632,6 +780,15 @@
           display: none;
         }
 
+        .sort-control {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .sort-select-wrap .dropdown-trigger {
+          min-width: 0;
+        }
+
         .catalog-toolbar {
           align-items: flex-start;
           flex-direction: column;
@@ -679,12 +836,19 @@
         <div class="field">
           <label for="animal-type">Амьтны төрөл</label>
           <div class="select-wrap">
-            <span class="select-icon" aria-hidden="true">🐾</span>
             <select id="animal-type" name="type">
-              <option value="">Бүх төрөл</option>
-              <option value="Dog">Нохой</option>
-              <option value="Cat">Муур</option>
-              <option value="Rabbit">Туулай</option>
+              <option value="" data-icon="🐾" data-description="Нохой, муур, туулай">
+                Бүх төрөл
+              </option>
+              <option value="Dog" data-icon="🐶" data-description="Гөлөг болон нас бие гүйцсэн нохой">
+                Нохой
+              </option>
+              <option value="Cat" data-icon="🐱" data-description="Муур болон зулзага">
+                Муур
+              </option>
+              <option value="Rabbit" data-icon="🐰" data-description="Туулай болон бүжин">
+                Туулай
+              </option>
             </select>
           </div>
         </div>
@@ -714,13 +878,12 @@
         </div>
 
         <div class="field">
-          <label for="location">Байршил</label>
+          <label for="location">Аймаг/хот, дүүрэг/сум</label>
           <input
             id="location"
             name="location"
             type="search"
-            placeholder="Жишээ нь: Улаанбаатар"
-            autocomplete="address-level1"
+            placeholder="Жишээ нь: Баянзүрх, Дархан сум"
           >
         </div>
 
@@ -737,11 +900,16 @@
         <div class="field">
           <label for="listing-type">Зарын төрөл</label>
           <div class="select-wrap">
-            <span class="select-icon" aria-hidden="true">⌑</span>
             <select id="listing-type" name="listingType">
-              <option value="">Бүх зар</option>
-              <option value="adoption">Үрчлүүлнэ</option>
-              <option value="sale">Худалдаална</option>
+              <option value="" data-icon="✦" data-description="Үрчлүүлэх болон худалдах бүх зар">
+                Бүх зар
+              </option>
+              <option value="adoption" data-icon="💚" data-description="Шинэ гэр бүл хайж буй амьтад">
+                Үрчлүүлнэ
+              </option>
+              <option value="sale" data-icon="🏷️" data-description="Үнэ болон нөхцөлтэй зарууд">
+                Худалдаална
+              </option>
             </select>
           </div>
         </div>
@@ -762,17 +930,25 @@
             <strong id="catalog-count">120 жишээ зар</strong>
             <span>Нөхцөлдөө тохирох шинэ найзаа олоорой</span>
           </div>
-          <label class="sort-control" for="sort-by">
+          <div class="sort-control">
             Эрэмбэлэх
             <span class="select-wrap sort-select-wrap">
-              <select id="sort-by" name="sort">
-                <option value="newest">Шинээр нэмэгдсэн</option>
-                <option value="oldest">Эхэлж нэмэгдсэн</option>
-                <option value="price-low">Үнэ: багаас их</option>
-                <option value="price-high">Үнэ: ихээс бага</option>
+              <select id="sort-by" name="sort" data-label="Эрэмбэлэх">
+                <option value="newest" data-icon="✦" data-description="Сүүлд нэмэгдсэн зар">
+                  Шинээр нэмэгдсэн
+                </option>
+                <option value="oldest" data-icon="↥" data-description="Өмнө нэмэгдсэн зар">
+                  Эхэлж нэмэгдсэн
+                </option>
+                <option value="price-low" data-icon="₮" data-description="Хамгийн боломжийн үнэ эхэнд">
+                  Үнэ: багаас их
+                </option>
+                <option value="price-high" data-icon="₮" data-description="Өндөр үнэтэй зар эхэнд">
+                  Үнэ: ихээс бага
+                </option>
               </select>
             </span>
-          </label>
+          </div>
         </div>
         <div class="pet-grid" id="pet-list" aria-live="polite"></div>
         <nav class="pagination" id="pagination" aria-label="Зарын хуудсууд">
@@ -799,6 +975,201 @@
       const previousPage = document.querySelector('#previous-page');
       const nextPage = document.querySelector('#next-page');
       const pageIndicator = document.querySelector('#page-indicator');
+
+      function enhanceDropdown(select) {
+        const wrapper = select.closest('.select-wrap');
+        const label =
+          select.dataset.label ||
+          document.querySelector(`label[for="${select.id}"]`)?.textContent.trim() ||
+          'Сонгох';
+        const menuId = `${select.id}-options`;
+        const trigger = document.createElement('button');
+        trigger.type = 'button';
+        trigger.className = 'dropdown-trigger';
+        trigger.id = `${select.id}-trigger`;
+        trigger.setAttribute('role', 'combobox');
+        trigger.setAttribute('aria-label', label);
+        trigger.setAttribute('aria-haspopup', 'listbox');
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.setAttribute('aria-controls', menuId);
+
+        const selectedValue = document.createElement('span');
+        selectedValue.className = 'dropdown-value';
+        const selectedIcon = document.createElement('span');
+        selectedIcon.className = 'dropdown-value-icon';
+        selectedIcon.setAttribute('aria-hidden', 'true');
+        const selectedCopy = document.createElement('span');
+        selectedCopy.className = 'dropdown-copy';
+        const selectedLabel = document.createElement('span');
+        selectedLabel.className = 'dropdown-current-label';
+        const selectedDescription = document.createElement('span');
+        selectedDescription.className = 'dropdown-current-description';
+        selectedCopy.append(selectedLabel, selectedDescription);
+        selectedValue.append(selectedIcon, selectedCopy);
+
+        const chevron = document.createElement('span');
+        chevron.className = 'dropdown-chevron';
+        chevron.setAttribute('aria-hidden', 'true');
+        trigger.append(selectedValue, chevron);
+
+        const menu = document.createElement('div');
+        menu.className = 'dropdown-menu';
+        menu.id = menuId;
+        menu.setAttribute('role', 'listbox');
+        menu.setAttribute('aria-label', label);
+        menu.hidden = true;
+
+        const options = Array.from(select.options).map((option) => {
+          const item = document.createElement('button');
+          item.type = 'button';
+          item.className = 'dropdown-option';
+          item.dataset.value = option.value;
+          item.setAttribute('role', 'option');
+          item.tabIndex = -1;
+
+          const icon = document.createElement('span');
+          icon.className = 'dropdown-option-icon';
+          icon.setAttribute('aria-hidden', 'true');
+          icon.textContent = option.dataset.icon || '•';
+
+          const copy = document.createElement('span');
+          copy.className = 'dropdown-option-copy';
+          const optionLabel = document.createElement('span');
+          optionLabel.className = 'dropdown-option-label';
+          optionLabel.textContent = option.textContent.trim();
+          const description = document.createElement('span');
+          description.className = 'dropdown-option-description';
+          description.textContent = option.dataset.description || '';
+          copy.append(optionLabel, description);
+
+          const check = document.createElement('span');
+          check.className = 'dropdown-check';
+          check.setAttribute('aria-hidden', 'true');
+          check.textContent = '✓';
+          item.append(icon, copy, check);
+          menu.append(item);
+          return item;
+        });
+
+        function updateSelection() {
+          const selectedOption = select.selectedOptions[0];
+          selectedIcon.textContent = selectedOption.dataset.icon || '•';
+          selectedLabel.textContent = selectedOption.textContent.trim();
+          selectedDescription.textContent =
+            selectedOption.dataset.description || '';
+
+          options.forEach((option) => {
+            const selected = option.dataset.value === select.value;
+            option.setAttribute('aria-selected', String(selected));
+            option.querySelector('.dropdown-check').hidden = !selected;
+          });
+        }
+
+        function closeDropdown(restoreFocus = false) {
+          menu.hidden = true;
+          wrapper.classList.remove('is-open');
+          trigger.setAttribute('aria-expanded', 'false');
+          if (restoreFocus) {
+            trigger.focus();
+          }
+        }
+
+        function openDropdown() {
+          document
+            .querySelectorAll('.dropdown-menu:not([hidden])')
+            .forEach((openMenu) => {
+              if (openMenu !== menu) {
+                openMenu.hidden = true;
+                openMenu.closest('.select-wrap')?.classList.remove('is-open');
+                document
+                  .getElementById(openMenu.getAttribute('aria-labelledby'))
+                  ?.setAttribute('aria-expanded', 'false');
+              }
+            });
+
+          updateSelection();
+          menu.hidden = false;
+          wrapper.classList.add('is-open');
+          trigger.setAttribute('aria-expanded', 'true');
+          options.find((option) => option.dataset.value === select.value)?.focus();
+        }
+
+        trigger.addEventListener('click', () => {
+          if (menu.hidden) {
+            openDropdown();
+          } else {
+            closeDropdown();
+          }
+        });
+
+        trigger.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+            event.preventDefault();
+            openDropdown();
+          }
+        });
+
+        menu.addEventListener('click', (event) => {
+          const option = event.target.closest('[role="option"]');
+          if (!option) {
+            return;
+          }
+
+          select.value = option.dataset.value;
+          updateSelection();
+          closeDropdown(true);
+          select.dispatchEvent(new Event('input', { bubbles: true }));
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+
+        menu.addEventListener('keydown', (event) => {
+          const activeIndex = options.indexOf(document.activeElement);
+          let nextIndex = activeIndex;
+
+          if (event.key === 'ArrowDown') {
+            nextIndex = (activeIndex + 1) % options.length;
+          } else if (event.key === 'ArrowUp') {
+            nextIndex = (activeIndex - 1 + options.length) % options.length;
+          } else if (event.key === 'Home') {
+            nextIndex = 0;
+          } else if (event.key === 'End') {
+            nextIndex = options.length - 1;
+          } else if (event.key === 'Escape') {
+            event.preventDefault();
+            closeDropdown(true);
+            return;
+          } else if (event.key === 'Tab') {
+            closeDropdown();
+            return;
+          } else {
+            return;
+          }
+
+          event.preventDefault();
+          options[nextIndex].focus();
+        });
+
+        select.addEventListener('change', updateSelection);
+        document.addEventListener('pointerdown', (event) => {
+          if (!wrapper.contains(event.target)) {
+            closeDropdown();
+          }
+        });
+
+        select.classList.add('dropdown-native-select');
+        select.tabIndex = -1;
+        select.setAttribute('aria-hidden', 'true');
+        menu.setAttribute('aria-labelledby', trigger.id);
+        wrapper.classList.add('custom-dropdown');
+        wrapper.append(trigger, menu);
+        updateSelection();
+
+        return updateSelection;
+      }
+
+      const dropdownRefreshers = Array.from(
+        document.querySelectorAll('.select-wrap select'),
+      ).map(enhanceDropdown);
 
       function sortPets(pets, sortOrder) {
         const sortedPets = [...pets];
@@ -957,7 +1328,10 @@
       filterForm.addEventListener('change', resetToFirstPage);
       sortBy.addEventListener('change', resetToFirstPage);
       filterForm.addEventListener('reset', () => {
-        window.requestAnimationFrame(resetToFirstPage);
+        window.requestAnimationFrame(() => {
+          dropdownRefreshers.forEach((refreshDropdown) => refreshDropdown());
+          resetToFirstPage();
+        });
       });
 
       previousPage.addEventListener('click', () => {
